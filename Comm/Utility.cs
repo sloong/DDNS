@@ -8,7 +8,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace sDDNS
+namespace DDNS
 {
     public static class Utility
     {
