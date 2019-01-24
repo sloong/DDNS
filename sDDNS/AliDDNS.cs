@@ -21,7 +21,7 @@ namespace sDDNS
         }
 
 
-        public void OnUpdate(string ip)
+        public bool OnUpdate(string ip)
         {
             var res = dns.describe_domain_records();
             var jRes = JObject.Parse(res);
@@ -51,6 +51,7 @@ namespace sDDNS
             {
                 log.Write("Update called, but value no changed.", LogLevel.Verbos);
             }
+            return true;
         }
     }
 }

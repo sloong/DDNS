@@ -31,7 +31,17 @@ namespace Sloong
         //日志文件写入流对象
         private static StreamWriter writer;
 
+        private static LogLevel logLevel;
+
         private static bool debug = false;
+
+        private EventRecordType recordType = EventRecordType.LogFile;
+
+        public enum EventRecordType
+        {
+            SystemEvent,
+            LogFile,
+        }
 
 
         AutoResetEvent wait_event = new AutoResetEvent(false);
@@ -48,12 +58,20 @@ namespace Sloong
                 }
                 _EventLog = new EventLog();
                 _EventLog.Source = sourceName;
+                recordType = EventRecordType.SystemEvent;
             }
             
         }
 
-        public void WriteLog(string msg, EventLogEntryType type = EventLogEntryType.Information)
+        public void WriteToSystemEvent(string msg, LogLevel level)
         {
+            EventLogEntryType type;
+            if (level == LogLevel.Fatal || level == LogLevel.Error)
+                type = EventLogEntryType.Error;
+            else if (level == LogLevel.Warn)
+                type = EventLogEntryType.Warning;
+            else
+                type = EventLogEntryType.Information;
             var message = $"{AppDomain.CurrentDomain.BaseDirectory}{Environment.NewLine}";
             message = message + msg;
             _EventLog.WriteEntry(message, type);
@@ -63,7 +81,12 @@ namespace Sloong
         /// 创建日志对象的新实例，采用默认当前程序位置和当前程序名称作为日志文件名
         /// </summary>
         public Log( string fileName )
-            : this(fileName, LogType.Single, "")
+            : this(fileName,  LogLevel.Info, LogType.Single, "")
+        {
+        }
+
+        public Log( string fileName, LogLevel level)
+            : this( fileName, level, LogType.Single, "")
         {
         }
        
@@ -74,7 +97,7 @@ namespace Sloong
         /// <param name="p">日志文件保存路径</param>
         /// <param name="t">日志文件创建方式的枚举</param>
         /// <param name="ex">日志文件的扩展文件名。如20170101_R中的“R”</param>
-        public Log(string p, LogType t, string ex)
+        public Log(string p, LogLevel level, LogType t, string ex)
         {
             if (msgs == null)
             {
@@ -82,12 +105,14 @@ namespace Sloong
                 path = p;
                 type = t;
                 file_ex = ex;
+                logLevel = level;
                 msgs = new Queue<Msg>();
                 Thread thread = new Thread(work);
                 thread.Start();
                 thread.Name = "Log Thread";
             }
         }
+
 
         //日志文件写入线程执行的方法
         private void work()
@@ -172,7 +197,7 @@ namespace Sloong
                     FileClose();
                     FileOpen();
                 }
-                writer.WriteLine(string.Format("[{0}]:[{1}]:[{2}]", msg.Datetime, msg.Type, msg.Text));
+                writer.WriteLine(string.Format("[{0}]:[{1}]:[{2}]", msg.Datetime, msg.Level, msg.Text));
                 if (debug)
                     writer.Flush();
             }
@@ -185,7 +210,7 @@ namespace Sloong
         //打开文件准备写入
         private void FileOpen()
         {
-            if (!Directory.Exists(path))
+            if( type != LogType.Single && !Directory.Exists(path))
                 Directory.CreateDirectory(path);
             writer = new StreamWriter( GetFilename(path), true, Encoding.UTF8);
         }
@@ -208,14 +233,25 @@ namespace Sloong
         /// <param name="msg">日志内容对象</param>
         public void Write(Msg msg)
         {
-            if (msg != null)
+            if( msg.Level < logLevel )
             {
-                lock (msgs)
-                {
-                    msgs.Enqueue(msg);
-                    wait_event.Set();
-                }
+                return;
             }
+            if(recordType == EventRecordType.SystemEvent)
+            {
+                WriteToSystemEvent(msg.Text, msg.Level);
+            }
+            else
+            {
+                if (msg != null)
+                {
+                    lock (msgs)
+                    {
+                        msgs.Enqueue(msg);
+                        wait_event.Set();
+                    }
+                }
+            }            
         }
 
         public void Flush()
@@ -297,7 +333,7 @@ namespace Sloong
         //日志记录的内容
         private string text;
         //日志记录的类型
-        private LogLevel type;
+        private LogLevel level;
 
         /// <summary>
         /// 创建新的日志记录实例;日志记录的内容为空,消息类型为MsgType.Unknown,日志时间为当前时间
@@ -326,7 +362,7 @@ namespace Sloong
         public Msg(DateTime dt, string t, LogLevel p)
         {
             datetime = dt;
-            type = p;
+            level = p;
             text = t;
         }
 
@@ -351,11 +387,12 @@ namespace Sloong
         /// <summary>
         /// 获取或设置日志记录的消息类型
         /// </summary>
-        public LogLevel Type
+        public LogLevel Level
         {
-            get { return type; }
-            set { type = value; }
+            get { return level; }
+            set { level = value; }
         }
+
 
         public new string ToString()
         {

@@ -9,6 +9,11 @@ namespace sDDNS
     interface IDDNS
     {
         void Initialize(string access_key_id, string access_key_secret, string domain_name, string record_name, Sloong.Log log);
-        void OnUpdate(string ip);
+        /// <summary>
+        /// 成功返回true
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
+        bool OnUpdate(string ip);
     }
 }

@@ -23,8 +23,11 @@ namespace sDDNS
         public ServiceMain()
         {
             InitializeComponent();
-
-            log = new Log(this.GetType().Assembly.FullName + ".log");
+#if DEBUG
+            Thread.Sleep(10000);
+#endif
+            log = new Log(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\SLOONG.COM\SLOONG_DDNS\sDDNS.log");
+            //log.EnableEventLog(sourceName);
 
             reg = new RegisterEx(Registry.LocalMachine, "SOFTWARE\\SLOONG.COM\\" + sourceName);
 
@@ -92,6 +95,7 @@ namespace sDDNS
             log.Write("SLOONG_DDNS Stopped.");
             _Running = false;
             _WorkThread.Abort();
+            log.Dispose();
         }
 
         void OnTimer(object sender, System.Timers.ElapsedEventArgs e)
@@ -113,7 +117,8 @@ namespace sDDNS
                     if (ip != new_ip)
                     {
                         log.Write("Update ip to " + new_ip);
-                        iDDNS.OnUpdate(new_ip);
+                        if(iDDNS.OnUpdate(new_ip))
+                            ip = new_ip;
                     }
                     Thread.Sleep(_CheckInterval);
                 }
