@@ -25,7 +25,8 @@ namespace sDDNS
         public static string[] IPWebList = new string[] {
             "http://pv.sohu.com/cityjson",
             "http://ip.cip.cc",
-            "http://www.ip138.com/ips138.asp"};
+            "http://www.ip138.com/ips138.asp",
+			"http://members.3322.org/dyndns/getip"};
 
         public static string GetPublicIP()
         {
