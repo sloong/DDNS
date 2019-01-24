@@ -18,7 +18,13 @@ namespace sDDNSUI
         string AppFolder = @"\SLOONG.COM\SLOONG_DDNS";
         string installutil_path = @"\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe";
         string ServiceExeName = "sDDNS.exe";
-        string ServiceUIExeName = "sDDNSUI.exe";
+        string[] installFileList = new string[]
+        {
+            "sDDNS.exe",
+            "sDDNSUI.exe",
+            "Newtonsoft.Json.dll"
+        };
+
         RegisterEx reg;
 
         public MainWindow()
@@ -115,9 +121,10 @@ namespace sDDNSUI
                     Directory.Delete(AppFolder, true);
 
                 Directory.CreateDirectory(AppFolder);
-                File.Copy(ServiceExeName, AppFolder + "\\" + ServiceExeName);
-                File.Copy(ServiceUIExeName, AppFolder + "\\" + ServiceUIExeName);
-
+                foreach( var item in installFileList )
+                {
+                    File.Copy(item, AppFolder + "\\" + item);
+                }
 
                 Utility.RunCMD(string.Format("{0} \"{1}\"", installutil_path, AppFolder + "\\"  + ServiceExeName));
                 Thread.Sleep(500);

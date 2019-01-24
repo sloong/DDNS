@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Sloong;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -42,11 +43,13 @@ namespace sDDNS
         string access_key_id;
         string access_key_secret;
         string domain_name;
-        public AliDns(string access_key_id, string access_key_secret, string domain_name)
+        Log log;
+        public AliDns(string access_key_id, string access_key_secret, string domain_name, Log log)
         {
             this.access_key_id = access_key_id;
             this.access_key_secret = access_key_secret;
             this.domain_name = domain_name;
+            this.log = log;
         }
 
         //生成一个指定长度(默认14位)的随机数值，其中
@@ -113,7 +116,7 @@ namespace sDDNS
 
         string sign_string(Dictionary<string, string> url_param)
         {
-            SortedDictionary<string, string> url_paramSort = new SortedDictionary<string, string>(url_param);
+            SortedDictionary<string, string> url_paramSort = new SortedDictionary<string, string>(url_param, StringComparer.Ordinal);
 
             string param_str = "";
             foreach (var item in url_paramSort)
@@ -126,6 +129,7 @@ namespace sDDNS
 
         string access_url(string url)
         {
+            log.Write("Access url:" + url, LogLevel.Verbos);
             WebRequest wr = WebRequest.Create(url);
             using (Stream s = wr.GetResponse().GetResponseStream())
             {
@@ -154,11 +158,12 @@ namespace sDDNS
                 common_param.Add(item.Key, item.Value);
             }
             var string_to_sign = this.sign_string(common_param);
-
+            log.Write("string_to_sign:"+string_to_sign, LogLevel.Debug);
             string hash_bytes = this.access_key_secret + "&";
             HMACSHA1 myHMACSHA1 = new HMACSHA1(Encoding.UTF8.GetBytes(hash_bytes));
             byte[] byteText = myHMACSHA1.ComputeHash(Encoding.UTF8.GetBytes(string_to_sign));
             var signature = System.Convert.ToBase64String(byteText);
+            log.Write("signature:"+signature, LogLevel.Debug);
             common_param.Add("Signature", signature);
             string url = "https://alidns.aliyuncs.com/?" + urlencode(common_param);
             return access_url(url);

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using Sloong;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,20 +12,14 @@ namespace sDDNS
     {
         string record_name;
         AliDns dns = null;
-        public void Initialize(string access_key_id , string access_key_secret, string domain_name, string record_name)
+        Log log;
+        public void Initialize(string access_key_id , string access_key_secret, string domain_name, string record_name, Log log)
         {
-            AliDns dns = new AliDns(access_key_id, access_key_secret, domain_name );
+            dns = new AliDns(access_key_id, access_key_secret, domain_name,log );
             this.record_name = record_name;
+            this.log = log;
         }
 
-        public bool CheckUpdate(string old_ip)
-        {
-            string ip = Utility.GetPublicIP();
-            if (ip == old_ip)
-                return true;
-            else
-                return false;
-        }
 
         public void OnUpdate(string ip)
         {
@@ -32,18 +27,29 @@ namespace sDDNS
             var jRes = JObject.Parse(res);
             var list = jRes["DomainRecords"]["Record"].ToArray();
             string recordID = null;
+            string recordValue = null;
             foreach (var item in list)
             {
                 if (item["RR"].ToString() == record_name)
+                {
                     recordID = item["RecordId"].ToString();
+                    recordValue = item["Value"].ToString();
+                    break;
+                }
             }
             if (string.IsNullOrWhiteSpace(recordID))
             {
+                log.Write(string.Format("Add domain reocrd [{0}] by {1}", record_name, ip));
                 dns.add_domain_record("A", record_name, ip);
+            }
+            else if( recordValue != ip )
+            {
+                log.Write(string.Format("Update domain reocrd [{0}] to {1}", record_name, ip));
+                dns.update_domain_record(recordID, "A", record_name, ip);
             }
             else
             {
-                dns.update_domain_record(recordID, "A", record_name, ip);
+                log.Write("Update called, but value no changed.", LogLevel.Verbos);
             }
         }
     }
