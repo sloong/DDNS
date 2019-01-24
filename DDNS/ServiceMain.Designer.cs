@@ -1,4 +1,4 @@
-﻿namespace sDDNS
+﻿namespace DDNS
 {
     partial class ServiceMain
     {

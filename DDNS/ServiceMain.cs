@@ -8,7 +8,7 @@ using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 
-namespace sDDNS
+namespace DDNS
 {
     public partial class ServiceMain : ServiceBase
     {
@@ -26,7 +26,7 @@ namespace sDDNS
 #if DEBUG
             Thread.Sleep(10000);
 #endif
-            log = new Log(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\SLOONG.COM\SLOONG_DDNS\sDDNS.log");
+            log = new Log(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + @"\SLOONG.COM\SLOONG_DDNS\DDNS.log");
             //log.EnableEventLog(sourceName);
 
             reg = new RegisterEx(Registry.LocalMachine, "SOFTWARE\\SLOONG.COM\\" + sourceName);

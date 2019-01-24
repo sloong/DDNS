@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace sDDNS
+namespace DDNS
 {
     class AliDDNS : IDDNS
     {

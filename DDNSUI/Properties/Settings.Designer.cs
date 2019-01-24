@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace sDDNSUI.Properties
+namespace DDNSUI.Properties
 {
 
 

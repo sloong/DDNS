@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{135E430F-0853-414A-9172-1AB8974AC2C3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>sDDNS</RootNamespace>
-    <AssemblyName>sDDNS</AssemblyName>
+    <RootNamespace>DDNS</RootNamespace>
+    <AssemblyName>DDNS</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

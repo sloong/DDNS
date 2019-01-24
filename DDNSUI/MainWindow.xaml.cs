@@ -1,12 +1,12 @@
 ﻿using Microsoft.Win32;
-using sDDNS;
+using DDNS;
 using System;
 using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace sDDNSUI
+namespace DDNSUI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑
@@ -17,11 +17,11 @@ namespace sDDNSUI
         static string REGISTERPATH = "SOFTWARE\\SLOONG.COM\\SLOONG_DDNS";
         string AppFolder = @"\SLOONG.COM\SLOONG_DDNS";
         string installutil_path = @"\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe";
-        string ServiceExeName = "sDDNS.exe";
+        string ServiceExeName = "DDNS.exe";
         string[] installFileList = new string[]
         {
-            "sDDNS.exe",
-            "sDDNSUI.exe",
+            "DDNS.exe",
+            "DDNSUI.exe",
             "Newtonsoft.Json.dll"
         };
 
