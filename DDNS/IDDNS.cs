@@ -15,5 +15,7 @@ namespace DDNS
         /// <param name="ip"></param>
         /// <returns></returns>
         bool OnUpdate(string ip);
+
+        string QueryCurrent(out string recordID);
     }
 }

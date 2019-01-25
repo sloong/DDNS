@@ -73,7 +73,9 @@ namespace DDNSUI
 
         void GetDataToUI()
         {
-            _Interval.Text = reg.GetValue("CheckInterval", "60");
+            _IP_Life_Time.Text = reg.GetValue("IPLifeTime", "24");
+            _Low_Interval.Text = reg.GetValue("LowInterval", "60");
+            _High_Interval.Text = reg.GetValue("HighInterval", "5");
             _AccessKeyID.Text = reg.GetValue("AccessKeyID", "");
             _AccessKeySecret.Text = reg.GetValue("AccessKeySecret", "");
             _Record_Name.Text = reg.GetValue("RecordName", "");
@@ -103,7 +105,9 @@ namespace DDNSUI
                 MessageBox.Show("Please input!");
                 return;
             }
-            reg.SetValue("CheckInterval", _Interval.Text);
+            reg.SetValue("IPLifeTime", _IP_Life_Time.Text);
+            reg.SetValue("LowInterval", _Low_Interval.Text);
+            reg.SetValue("HighInterval", _High_Interval.Text);
             reg.SetValue("AccessKeyID", _AccessKeyID.Text);
             reg.SetValue("AccessKeySecret", _AccessKeySecret.Text);
             reg.SetValue("RecordName", _Record_Name.Text);

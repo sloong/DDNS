@@ -21,12 +21,12 @@ namespace DDNS
         }
 
 
-        public bool OnUpdate(string ip)
+        public string QueryCurrent( out string recordID )
         {
             var res = dns.describe_domain_records();
             var jRes = JObject.Parse(res);
             var list = jRes["DomainRecords"]["Record"].ToArray();
-            string recordID = null;
+            recordID = null;
             string recordValue = null;
             foreach (var item in list)
             {
@@ -37,6 +37,13 @@ namespace DDNS
                     break;
                 }
             }
+            return recordValue;
+        }
+
+        public bool OnUpdate(string ip)
+        {
+            string recordID = null;
+            string recordValue = QueryCurrent(out recordID);
             if (string.IsNullOrWhiteSpace(recordID))
             {
                 log.Write(string.Format("Add domain reocrd [{0}] by {1}", record_name, ip));

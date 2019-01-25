@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Label Content="检查运行间隔" HorizontalAlignment="Left" Margin="91,100,0,0" VerticalAlignment="Top"/>
+        <Label Content="即将过期运行间隔(分)" HorizontalAlignment="Left" Margin="78,286,0,0" VerticalAlignment="Top"/>
         <Button Content="应用" HorizontalAlignment="Left" Margin="230,337,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
         <Button Content="退出" HorizontalAlignment="Left" Margin="394,337,0,0" VerticalAlignment="Top" Width="75" Click="Button_Exit_Click"/>
-        <TextBox x:Name="_Interval" HorizontalAlignment="Left" Height="23" Margin="196,102,0,0" TextWrapping="Wrap" Text="工作间隔" VerticalAlignment="Top" Width="120"/>
-        <TextBox x:Name="_PublicIP" HorizontalAlignment="Left" Height="23" Margin="537,255,0,0" TextWrapping="Wrap" Text="IP地址" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
-        <Label Content="当前外网IP地址" HorizontalAlignment="Left" Margin="432,251,0,0" VerticalAlignment="Top"/>
-        <TextBlock Margin="386,102,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="116"><Run Text="通过"/><Run Text="访问指定的站点来获取当前公网IP，并添加或更新到DNS服务商的解析列表中"/><Run Text="。"/><LineBreak/></TextBlock>
+        <TextBox x:Name="_High_Interval" HorizontalAlignment="Left" Height="23" Margin="209,288,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="120"/>
+        <TextBox x:Name="_PublicIP" HorizontalAlignment="Left" Height="23" Margin="586,205,0,0" TextWrapping="Wrap" Text="IP地址" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
+        <Label Content="当前外网IP地址" HorizontalAlignment="Left" Margin="464,203,0,0" VerticalAlignment="Top"/>
+        <TextBlock Margin="386,90,36,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="71"><Run Text="通过"/><Run Text="访问指定的站点来获取当前公网IP，并添加或更新到DNS服务商的解析列表中"/><Run Text="。"/><LineBreak/></TextBlock>
         <Button x:Name="_InstallBtn" Content="安装服务" HorizontalAlignment="Left" Margin="386,44,0,0" VerticalAlignment="Top" Width="75" Click="Button_Install_Click"/>
         <Label Content="服务状态" HorizontalAlignment="Left" Margin="104,41,0,0" VerticalAlignment="Top"/>
         <Label x:Name="_ServiceStatus" Content="尚未安装服务" HorizontalAlignment="Left" Margin="209,41,0,0" VerticalAlignment="Top"/>
@@ -21,19 +21,23 @@
         <Button x:Name="_StartServiceBtn" Content="启动服务" HorizontalAlignment="Left" Margin="484,44,0,0" VerticalAlignment="Top" Width="75" Click="_StartServiceBtn_Click"/>
         <Button x:Name="_StopServiceBtn" Content="停止服务" HorizontalAlignment="Left" Margin="484,44,0,0" VerticalAlignment="Top" Width="75" Click="_StopServiceBtn_Click"/>
         <Button Content="刷新状态" HorizontalAlignment="Left" Margin="660,44,0,0" VerticalAlignment="Top" Width="75" Click="Button_Refresh_Click"/>
-        <Label Content="DDNS类型" HorizontalAlignment="Left" Margin="91,137,0,0" VerticalAlignment="Top"/>
-        <ComboBox x:Name="_DDNSType" HorizontalAlignment="Left" Margin="196,137,0,0" VerticalAlignment="Top" Width="120">
+        <Label Content="DDNS类型" HorizontalAlignment="Left" Margin="91,90,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="_DDNSType" HorizontalAlignment="Left" Margin="209,90,0,0" VerticalAlignment="Top" Width="120">
             <ComboBoxItem Content="阿里云" Tag="AliDDNS"/>
             <ComboBoxItem Content="腾讯云(尚不支持)" Tag="DnspodDDNS"/>
         </ComboBox>
-        <Label Content="AccessKeyID" HorizontalAlignment="Left" Margin="91,174,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="_AccessKeyID" HorizontalAlignment="Left" Height="23" Margin="196,176,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
-        <Label Content="Record Name" HorizontalAlignment="Left" Margin="91,253,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="_Record_Name" HorizontalAlignment="Left" Height="23" Margin="196,255,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="182"/>
-        <Label Content="Domain Name" HorizontalAlignment="Left" Margin="91,294,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="_Domain_Name" HorizontalAlignment="Left" Height="23" Margin="196,296,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="238"/>
-        <Label Content="AccessKeySecret" HorizontalAlignment="Left" Margin="91,211,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="_AccessKeySecret" HorizontalAlignment="Left" Height="23" Margin="196,213,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="394"/>
+        <Label Content="AccessKeyID" HorizontalAlignment="Left" Margin="91,127,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="_AccessKeyID" HorizontalAlignment="Left" Height="23" Margin="209,129,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Record Name" HorizontalAlignment="Left" Margin="91,206,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="_Record_Name" HorizontalAlignment="Left" Height="23" Margin="209,208,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="182"/>
+        <Label Content="Domain Name" HorizontalAlignment="Left" Margin="91,247,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="_Domain_Name" HorizontalAlignment="Left" Height="23" Margin="209,249,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="238"/>
+        <Label Content="AccessKeySecret" HorizontalAlignment="Left" Margin="91,164,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="_AccessKeySecret" HorizontalAlignment="Left" Height="23" Margin="209,166,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="394"/>
+        <Label Content="有效期内运行间隔(分)" HorizontalAlignment="Left" Margin="464,286,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="_Low_Interval" HorizontalAlignment="Left" Height="23" Margin="586,286,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="120"/>
+        <Label Content="IP有效时间(小时)" HorizontalAlignment="Left" Margin="464,247,0,0" VerticalAlignment="Top" ToolTip="即此IP分配之后多久，ISP会强制断开并重新分配IP，通常为24小时"/>
+        <TextBox x:Name="_IP_Life_Time" HorizontalAlignment="Left" Height="23" Margin="586,247,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="120"/>
 
     </Grid>
 </Window>
