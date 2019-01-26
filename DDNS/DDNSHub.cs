@@ -90,8 +90,6 @@ namespace DDNS
                 }
 
                 iDDNS.Initialize(access_key_id, access_key_secret, domain_name, record_name, log);
-                string id = null;
-                ip = iDDNS.QueryCurrent(out id);
                 /*var timer1 = new System.Timers.Timer();
                 timer1.Interval = 3000;  //设置计时器事件间隔执行时间
                 timer1.Elapsed += new System.Timers.ElapsedEventHandler(OnTimer);
@@ -126,6 +124,11 @@ namespace DDNS
                 {
                     // if ip is changed, record the time, and sleep whit the low interval.
                     string new_ip = Utility.GetPublicIP();
+                    if( ip == null )
+                    {
+                        string id = null;
+                        ip = iDDNS.QueryCurrent(out id);
+                    }
                     if (ip != new_ip)
                     {
                         log.Write("Update ip to " + new_ip);
@@ -164,9 +167,9 @@ namespace DDNS
                     {
                         StreamReader reader = new StreamReader(s, Encoding.UTF8);
                         string result = reader.ReadToEnd();
-                        log.Write("WebException happened: " + result, LogLevel.Error);
+                        log.Write("WebException happened: " + e.Message + Environment.NewLine + result, LogLevel.Error);
                         // when fialed, run loop in each minute.
-                        Thread.Sleep(_High_Interval);
+                        Thread.Sleep(_High_Interval*60*1000);
                     }
                 }
             }
