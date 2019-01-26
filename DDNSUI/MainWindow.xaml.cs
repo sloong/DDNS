@@ -18,6 +18,7 @@ namespace DDNSUI
         {
             "DDNS.exe",
             "DDNSUI.exe",
+            "DDNSCmd.exe",
             "Newtonsoft.Json.dll"
         };
 
