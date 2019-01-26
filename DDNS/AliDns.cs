@@ -135,6 +135,7 @@ namespace DDNS
             {
                 StreamReader reader = new StreamReader(s, Encoding.UTF8);
                 string result = reader.ReadToEnd();
+                log.Write(result, LogLevel.Verbos);
                 return result;
             }
         }

@@ -80,6 +80,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Compile Include="..\Comm\define.cs">
+      <Link>define.cs</Link>
+    </Compile>
+    <Compile Include="..\Comm\Log.cs">
+      <Link>Log.cs</Link>
+    </Compile>
     <Compile Include="..\Comm\RegisterEx.cs">
       <Link>RegisterEx.cs</Link>
     </Compile>

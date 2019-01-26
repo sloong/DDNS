@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
+using Sloong;
 
 namespace DDNSUI
 {
@@ -13,11 +14,6 @@ namespace DDNSUI
     /// </summary>
     public partial class MainWindow : Window
     {
-        static string SERVICENAME = "SLOONG_DDNSService";
-        static string REGISTERPATH = "SOFTWARE\\SLOONG.COM\\SLOONG_DDNS";
-        string AppFolder = @"\SLOONG.COM\SLOONG_DDNS";
-        string installutil_path = @"\Microsoft.NET\Framework\v4.0.30319\InstallUtil.exe";
-        string ServiceExeName = "DDNS.exe";
         string[] installFileList = new string[]
         {
             "DDNS.exe",
@@ -30,19 +26,23 @@ namespace DDNSUI
         public MainWindow()
         {
             InitializeComponent();
-            AppFolder = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles) + AppFolder;
-            installutil_path = Environment.GetFolderPath(Environment.SpecialFolder.Windows) + installutil_path;
-            reg = new RegisterEx(Registry.LocalMachine, REGISTERPATH);
+            reg = new RegisterEx(Registry.LocalMachine, Defines.REGISTERPATH);
+            foreach (var item in Enum.GetValues(typeof(LogLevel)))
+            {
+                string strName = Enum.GetName(typeof(LogLevel), item);//获取名称
+                string strVaule = item.ToString();//获取值
+                _LOG_LEVEL.Items.Add(strName);
+            }
             GetDataToUI();
             UpdateServiceStatus();
         }
 
         public void UpdateServiceStatus()
         {
-            var path = Utility.GetServicePath(SERVICENAME);
+            var path = Utility.GetServicePath(Defines.SERVICENAME);
 
             var ver = Utility.GetExeVersionInfo(path);
-            var status = Utility.GetServiceStatus(SERVICENAME);
+            var status = Utility.GetServiceStatus(Defines.SERVICENAME);
             if (status == "")
             {
                 _ServiceStatus.Content = "No Install";
@@ -81,6 +81,16 @@ namespace DDNSUI
             _Record_Name.Text = reg.GetValue("RecordName", "");
             _Domain_Name.Text = reg.GetValue("DomainName", "");
 
+            var level = reg.GetValue("LogLevel", "Info");
+            foreach( var item in _LOG_LEVEL.Items)
+            {
+                if( item.ToString() == level)
+                {
+                    _LOG_LEVEL.SelectedItem = item;
+                    break;
+                }
+            }
+
             _PublicIP.Text = Utility.GetPublicIP();
             var opt = reg.GetValue("DDNSType", "");
 
@@ -100,7 +110,7 @@ namespace DDNSUI
                 string.IsNullOrEmpty(_AccessKeySecret.Text) ||
                 string.IsNullOrEmpty(_Record_Name.Text) ||
                 string.IsNullOrEmpty(_Domain_Name.Text) ||
-                _DDNSType.SelectedItem==null)
+                _DDNSType.SelectedItem == null)
             {
                 MessageBox.Show("Please input!");
                 return;
@@ -112,6 +122,7 @@ namespace DDNSUI
             reg.SetValue("AccessKeySecret", _AccessKeySecret.Text);
             reg.SetValue("RecordName", _Record_Name.Text);
             reg.SetValue("DomainName", _Domain_Name.Text);
+            reg.SetValue("LogLevel", _LOG_LEVEL.SelectedItem.ToString());
 
             ComboBoxItem item = _DDNSType.SelectedItem as ComboBoxItem;
             reg.SetValue("DDNSType", item.Tag.ToString());
@@ -119,18 +130,18 @@ namespace DDNSUI
 
         private void Button_Install_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(ServiceExeName))
+            if (File.Exists(Defines.ServiceExeName))
             {
-                if (Directory.Exists(AppFolder))
-                    Directory.Delete(AppFolder, true);
+                if (Directory.Exists(Defines.AppFolder))
+                    Directory.Delete(Defines.AppFolder, true);
 
-                Directory.CreateDirectory(AppFolder);
-                foreach( var item in installFileList )
+                Directory.CreateDirectory(Defines.AppFolder);
+                foreach (var item in installFileList)
                 {
-                    File.Copy(item, AppFolder + "\\" + item);
+                    File.Copy(item, Defines.AppFolder + "\\" + item);
                 }
 
-                Utility.RunCMD(string.Format("{0} \"{1}\"", installutil_path, AppFolder + "\\"  + ServiceExeName));
+                Utility.RunCMD(string.Format("{0} \"{1}\"", Defines.installutil_path, Defines.AppFolder + "\\" + Defines.ServiceExeName));
                 Thread.Sleep(500);
 
                 UpdateServiceStatus();
@@ -139,7 +150,7 @@ namespace DDNSUI
 
         private void _StopServiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            System.ServiceProcess.ServiceController sc = new System.ServiceProcess.ServiceController(SERVICENAME);
+            System.ServiceProcess.ServiceController sc = new System.ServiceProcess.ServiceController(Defines.SERVICENAME);
             sc.Stop();
             UpdateServiceStatus();
         }
@@ -151,7 +162,7 @@ namespace DDNSUI
 
         private void _StartServiceBtn_Click(object sender, RoutedEventArgs e)
         {
-            System.ServiceProcess.ServiceController sc = new System.ServiceProcess.ServiceController(SERVICENAME);
+            System.ServiceProcess.ServiceController sc = new System.ServiceProcess.ServiceController(Defines.SERVICENAME);
             sc.Start();
             UpdateServiceStatus();
         }
@@ -163,8 +174,8 @@ namespace DDNSUI
 
         private void Button_Uninstall_Click(object sender, RoutedEventArgs e)
         {
-            var path = Utility.GetServicePath(SERVICENAME);
-            Utility.RunCMD(string.Format("{0} /u \"{1}\"", installutil_path, path));
+            var path = Utility.GetServicePath(Defines.SERVICENAME);
+            Utility.RunCMD(string.Format("{0} /u \"{1}\"", Defines.installutil_path, path));
             Thread.Sleep(500);
             UpdateServiceStatus();
         }

@@ -8,8 +8,8 @@
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Label Content="即将过期运行间隔(分)" HorizontalAlignment="Left" Margin="78,286,0,0" VerticalAlignment="Top"/>
-        <Button Content="应用" HorizontalAlignment="Left" Margin="230,337,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
-        <Button Content="退出" HorizontalAlignment="Left" Margin="394,337,0,0" VerticalAlignment="Top" Width="75" Click="Button_Exit_Click"/>
+        <Button Content="应用" HorizontalAlignment="Left" Margin="263,343,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <Button Content="退出" HorizontalAlignment="Left" Margin="427,343,0,0" VerticalAlignment="Top" Width="75" Click="Button_Exit_Click"/>
         <TextBox x:Name="_High_Interval" HorizontalAlignment="Left" Height="23" Margin="209,288,0,0" TextWrapping="Wrap" Text="60" VerticalAlignment="Top" Width="120"/>
         <TextBox x:Name="_PublicIP" HorizontalAlignment="Left" Height="23" Margin="586,205,0,0" TextWrapping="Wrap" Text="IP地址" VerticalAlignment="Top" Width="120" IsReadOnly="True"/>
         <Label Content="当前外网IP地址" HorizontalAlignment="Left" Margin="464,203,0,0" VerticalAlignment="Top"/>
@@ -38,6 +38,9 @@
         <TextBox x:Name="_Low_Interval" HorizontalAlignment="Left" Height="23" Margin="586,286,0,0" TextWrapping="Wrap" Text="5" VerticalAlignment="Top" Width="120"/>
         <Label Content="IP有效时间(小时)" HorizontalAlignment="Left" Margin="464,247,0,0" VerticalAlignment="Top" ToolTip="即此IP分配之后多久，ISP会强制断开并重新分配IP，通常为24小时"/>
         <TextBox x:Name="_IP_Life_Time" HorizontalAlignment="Left" Height="23" Margin="586,247,0,0" TextWrapping="Wrap" Text="24" VerticalAlignment="Top" Width="120"/>
+        <Label Content="LOG级别" HorizontalAlignment="Left" Margin="586,341,0,0" VerticalAlignment="Top"/>
+        <ComboBox x:Name="_LOG_LEVEL" HorizontalAlignment="Left" Margin="645,343,0,0" VerticalAlignment="Top" Width="120">
+        </ComboBox>
 
     </Grid>
 </Window>
