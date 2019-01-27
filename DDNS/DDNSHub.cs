@@ -124,6 +124,11 @@ namespace DDNS
                 {
                     // if ip is changed, record the time, and sleep whit the low interval.
                     string new_ip = Utility.GetPublicIP();
+                    if(string.IsNullOrWhiteSpace(new_ip))
+                    {
+                        log.Write("Get ip fialed.", LogLevel.Error);
+                        continue;
+                    }
                     if( ip == null )
                     {
                         string id = null;
@@ -156,6 +161,7 @@ namespace DDNS
                         // we must make sure when update time is big than life time, this loop can work by high interval.
                         // so here use the mined between time span value and low interval. 
                         var sleep_time = Math.Min((int)(_IP_Life_Time - updatedTime), _Low_Interval);
+                        if (sleep_time < _High_Interval) sleep_time = _High_Interval;
                         log.Write("Sleep with time:" + sleep_time, LogLevel.Verbos);
                         Thread.Sleep(sleep_time*60*1000);
                     }

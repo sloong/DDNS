@@ -31,9 +31,10 @@ namespace DDNS
         public static string GetPublicIP()
         {
             string tempip = null;
-            try
+
+            foreach (var address in IPWebList)
             {
-                foreach (var address in IPWebList)
+                try
                 {
                     WebRequest wr = WebRequest.Create(address);
                     Stream s = wr.GetResponse().GetResponseStream();
@@ -42,9 +43,10 @@ namespace DDNS
                     if (!string.IsNullOrWhiteSpace(tempip))
                         break;
                 }
-            }
-            catch
-            {
+                catch (Exception e)
+                {
+                    Console.Write("Get ip from " + address + " error.");
+                }
             }
             return tempip;
         }
