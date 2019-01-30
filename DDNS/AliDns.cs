@@ -98,7 +98,7 @@ namespace DDNS
         string utc_time()
         {
             var utc_time = DateTime.Now.ToUniversalTime();
-            return utc_time.ToString("yyyy-MM-ddThh:mm:ssZ");
+            return utc_time.ToString("yyyy-MM-ddTHH:mm:ssZ");
         }
 
    
