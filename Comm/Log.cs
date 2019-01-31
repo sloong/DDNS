@@ -35,7 +35,7 @@ namespace Sloong
 
         private static bool debug = false;
 
-        private EventRecordType recordType = EventRecordType.LogFile;
+        private static EventRecordType recordType = EventRecordType.LogFile;
 
         public enum EventRecordType
         {
@@ -212,6 +212,7 @@ namespace Sloong
         {
             if( type != LogType.Single && !Directory.Exists(path))
                 Directory.CreateDirectory(path);
+            //writer = new FileStream(GetFilename(path), FileMode.Append, FileAccess.Write, FileShare.Write);// StreamWriter( GetFilename(path), true, Encoding.UTF8);
             writer = new StreamWriter( GetFilename(path), true, Encoding.UTF8);
         }
 

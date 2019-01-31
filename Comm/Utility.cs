@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using Sloong;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -28,7 +29,7 @@ namespace DDNS
             "http://www.ip138.com/ips138.asp",
 			"http://members.3322.org/dyndns/getip"};
 
-        public static string GetPublicIP()
+        public static string GetPublicIP(Log log = null)
         {
             string tempip = null;
 
@@ -43,9 +44,25 @@ namespace DDNS
                     if (!string.IsNullOrWhiteSpace(tempip))
                         break;
                 }
+                catch (WebException e)
+                {
+                    if( log != null )
+                    {
+                        using (Stream s = e.Response.GetResponseStream())
+                        {
+                            StreamReader reader = new StreamReader(s, Encoding.UTF8);
+                            string result = reader.ReadToEnd();
+                            log.Write("Get ip from " + address + " error." + e.ToString());
+                            log.Write("WebException happened: " + e.Message + Environment.NewLine + result, LogLevel.Error);
+                        }
+                    }
+                }
                 catch (Exception e)
                 {
-                    Console.Write("Get ip from " + address + " error.");
+                    if (log != null)
+                    {
+                        log.Write("Get ip from " + address + " error." + e.ToString());
+                    }
                 }
             }
             return tempip;

@@ -123,7 +123,7 @@ namespace DDNS
                 try
                 {
                     // if ip is changed, record the time, and sleep whit the low interval.
-                    string new_ip = Utility.GetPublicIP();
+                    string new_ip = Utility.GetPublicIP(log);
                     if(string.IsNullOrWhiteSpace(new_ip))
                     {
                         log.Write("Get ip fialed.", LogLevel.Error);
