@@ -27,7 +27,7 @@ namespace DDNS
             {
                 logLevel = (LogLevel)Enum.Parse(typeof(LogLevel), reg.GetValue("LogLevel", "Info"));
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Console.Write(e.ToString());
             }
@@ -124,12 +124,12 @@ namespace DDNS
                 {
                     // if ip is changed, record the time, and sleep whit the low interval.
                     string new_ip = Utility.GetPublicIP(log);
-                    if(string.IsNullOrWhiteSpace(new_ip))
+                    if (string.IsNullOrWhiteSpace(new_ip))
                     {
                         log.Write("Get ip fialed.", LogLevel.Error);
                         continue;
                     }
-                    if( ip == null )
+                    if (ip == null)
                     {
                         string id = null;
                         ip = iDDNS.QueryCurrent(out id);
@@ -152,7 +152,7 @@ namespace DDNS
                     if (updatedTime > _IP_Life_Time)
                     {
                         log.Write("Sleep with time:" + _High_Interval, LogLevel.Verbos);
-                        Thread.Sleep(_High_Interval*60*1000);
+                        Thread.Sleep(_High_Interval * 60 * 1000);
                     }
                     else
                     {
@@ -163,7 +163,7 @@ namespace DDNS
                         var sleep_time = Math.Min((int)(_IP_Life_Time - updatedTime), _Low_Interval);
                         if (sleep_time < _High_Interval) sleep_time = _High_Interval;
                         log.Write("Sleep with time:" + sleep_time, LogLevel.Verbos);
-                        Thread.Sleep(sleep_time*60*1000);
+                        Thread.Sleep(sleep_time * 60 * 1000);
                     }
 
                 }
@@ -175,11 +175,15 @@ namespace DDNS
                         string result = reader.ReadToEnd();
                         log.Write("WebException happened: " + e.Message + Environment.NewLine + result, LogLevel.Error);
                         // when fialed, run loop in each minute.
-                        Thread.Sleep(_High_Interval*60*1000);
+                        Thread.Sleep(_High_Interval * 60 * 1000);
                     }
+                }
+                catch(Exception ex)
+                {
+                    log.Write("Unknow exception happend: " + ex.ToString());
                 }
             }
         }
 
-        }
+    }
 }
