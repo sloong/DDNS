@@ -23,13 +23,16 @@ namespace DDNS
             }
         }
 
-        public static string[] IPWebList = new string[] {
-            "http://pv.sohu.com/cityjson",
+        public static string[] IPWebList = new string[] 
+        {
             "http://ip.cip.cc",
+            "http://pv.sohu.com/cityjson",
+            "http://v4.ipv6-test.com/api/myip.php",
+            "http://checkip.dyndns.com",
             "http://www.ip138.com/ips138.asp",
-			"http://members.3322.org/dyndns/getip"};
+        };
 
-        public static string GetPublicIP(Log log = null)
+        public static string GetPublicIP(Log log = null, bool enableThrow=false)
         {
             string tempip = null;
 
@@ -46,23 +49,25 @@ namespace DDNS
                 }
                 catch (WebException e)
                 {
-                    if( log != null )
+                    using (Stream s = e.Response.GetResponseStream())
                     {
-                        using (Stream s = e.Response.GetResponseStream())
-                        {
-                            StreamReader reader = new StreamReader(s, Encoding.UTF8);
-                            string result = reader.ReadToEnd();
-                            log.Write("Get ip from " + address + " error." + e.ToString());
-                            log.Write("WebException happened: " + e.Message + Environment.NewLine + result, LogLevel.Error);
-                        }
+                        StreamReader reader = new StreamReader(s, Encoding.UTF8);
+                        string result = reader.ReadToEnd();
+                        string message = $"Get IP From [{address}] happened WebException: {e.Message + Environment.NewLine + result}";
+                        if( log != null )
+                            log.Write(message, LogLevel.Error);
+                        if (enableThrow)
+                            throw new Exception(message);
                     }
+                    
                 }
                 catch (Exception e)
                 {
+                    string message = $"Get IP From [{address}] happened Exception: {e.ToString()}";
                     if (log != null)
-                    {
-                        log.Write("Get ip from " + address + " error." + e.ToString());
-                    }
+                        log.Write(message, LogLevel.Error);
+                    if (enableThrow)
+                        throw new Exception(message);
                 }
             }
             return tempip;

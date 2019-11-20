@@ -127,6 +127,7 @@ namespace DDNS
                     if (string.IsNullOrWhiteSpace(new_ip))
                     {
                         log.Write("Get ip fialed.", LogLevel.Error);
+                        Thread.Sleep(1000*30);
                         continue;
                     }
                     if (ip == null)
@@ -181,6 +182,7 @@ namespace DDNS
                 catch(Exception ex)
                 {
                     log.Write("Unknow exception happend: " + ex.ToString());
+                    Thread.Sleep(500);
                 }
             }
         }

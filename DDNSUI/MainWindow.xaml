@@ -41,6 +41,7 @@
         <Label Content="LOG级别" HorizontalAlignment="Left" Margin="586,341,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="_LOG_LEVEL" HorizontalAlignment="Left" Margin="645,343,0,0" VerticalAlignment="Top" Width="120">
         </ComboBox>
+        <Button Content="刷新" HorizontalAlignment="Left" Margin="717,206,0,0" VerticalAlignment="Top" Width="39" Click="Button_Click_1"  Height="22"/>
 
     </Grid>
 </Window>

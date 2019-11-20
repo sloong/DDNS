@@ -92,7 +92,7 @@ namespace DDNSUI
                 }
             }
 
-            _PublicIP.Text = Utility.GetPublicIP();
+            Button_Click_1(this,null);
             var opt = reg.GetValue("DDNSType", "");
 
             foreach (ComboBoxItem item in _DDNSType.Items)
@@ -184,6 +184,18 @@ namespace DDNSUI
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             SaveUIToData();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _PublicIP.Text = Utility.GetPublicIP(enableThrow: true);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
